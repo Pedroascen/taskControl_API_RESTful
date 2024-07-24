@@ -36,6 +36,6 @@ public class UsuarioServicioImpl implements UsuarioServicio {
 
     @Override
     public Usuario getUsuarioById(Integer id) {
-        return usuarioRepositorio.findById(id).orElseThrow(EntityNotFoundException::new);
+        return usuarioRepositorio.findById(id).orElseThrow(()->new EntityNotFoundException("Usuario no encontrado..."));
     }
 }
