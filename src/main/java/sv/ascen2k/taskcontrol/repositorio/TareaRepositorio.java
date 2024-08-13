@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface TareaRepositorio extends JpaRepository<Tarea,Integer> {
     List<Tarea> findByUsuarioId(Integer idResponsable);
-    List<Tarea> findByActivo(Boolean activo);
+    List<Tarea> findByVigente(Boolean vigente);
 }

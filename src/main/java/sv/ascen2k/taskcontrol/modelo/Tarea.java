@@ -2,6 +2,7 @@ package sv.ascen2k.taskcontrol.modelo;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,11 +15,15 @@ public class Tarea {
     private String descripcion;
     @Column(name = "fecha_inicio")
     private LocalDateTime fechaInicio;
+    @Column(name = "fecha_estimada")
+    private LocalDate fechaEstimada;
     @Column(name = "fecha_fin")
     private LocalDateTime fechaFin;
+    @Enumerated(EnumType.STRING)
     private Prioridad prioridad;
+    @Enumerated(EnumType.STRING)
     private Estado estado;
-    private Boolean activo;
+    private Boolean vigente;
 
     @ManyToOne
     @JoinColumn(name = "responsable_id",referencedColumnName = "id")
@@ -69,6 +74,14 @@ public class Tarea {
         this.fechaInicio = fechaInicio;
     }
 
+    public LocalDate getFechaEstimada() {
+        return fechaEstimada;
+    }
+
+    public void setFechaEstimada(LocalDate fechaEstimada) {
+        this.fechaEstimada = fechaEstimada;
+    }
+
     public LocalDateTime getFechaFin() {
         return fechaFin;
     }
@@ -101,10 +114,10 @@ public class Tarea {
         this.usuario = usuario;
     }
 
-    public Boolean getActivo() {
-        return activo;
+    public Boolean getVigente() {
+        return vigente;
     }
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
+    public void setVigente(Boolean vigente) {
+        this.vigente = vigente;
     }
 }

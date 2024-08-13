@@ -2,6 +2,8 @@ package sv.ascen2k.taskcontrol.servicio.implementacion;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sv.ascen2k.taskcontrol.modelo.Usuario;
 import sv.ascen2k.taskcontrol.repositorio.UsuarioRepositorio;
@@ -37,5 +39,10 @@ public class UsuarioServicioImpl implements UsuarioServicio {
     @Override
     public Usuario getUsuarioById(Integer id) {
         return usuarioRepositorio.findById(id).orElseThrow(()->new EntityNotFoundException("Usuario no encontrado..."));
+    }
+
+    @Override
+    public Page<Usuario> getPeageableUsuarios(Pageable pageable) {
+        return usuarioRepositorio.findAll(pageable);
     }
 }

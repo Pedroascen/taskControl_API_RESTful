@@ -1,8 +1,11 @@
 package sv.ascen2k.taskcontrol.modelo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Usuario {
@@ -15,11 +18,12 @@ public class Usuario {
     private String clave;
     @Column(name = "fecha_crea")
     private LocalDateTime fechaCreacion;
-
+    private Boolean activo;
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private List<Tarea> tareas = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     private Rol rol;
-
-    private Boolean activo;
      public enum Rol{
         ADMIN,
         NORMAL
@@ -79,5 +83,11 @@ public class Usuario {
     }
     public void setActivo(Boolean activo) {
         this.activo = activo;
+    }
+    public List<Tarea> getTareas() {
+        return tareas;
+    }
+    public void setTareas(List<Tarea> tareas) {
+        this.tareas = tareas;
     }
 }
