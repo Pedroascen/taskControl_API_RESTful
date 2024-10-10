@@ -28,12 +28,12 @@ public class TareaServicioImpl implements TareaServicio {
 
     @Override
     public List<Tarea> getAllTareas() {
-        return tareaRepositorio.findAll();
+        return tareaRepositorio.findByEsVigente(true);
     }
 
     @Override
     public List<Tarea> getTareasVigentes(Boolean vigente) {
-        return tareaRepositorio.findByVigente(vigente);
+        return tareaRepositorio.findByEsVigente(vigente);
     }
 
     @Override
@@ -44,6 +44,11 @@ public class TareaServicioImpl implements TareaServicio {
     @Override
     public Tarea getTareaById(Integer id) {
         return tareaRepositorio.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public Tarea getTareaByIdAndEsVigencia(Integer id, Boolean vigencia) {
+        return tareaRepositorio.findByIdAndEsVigente(id,vigencia).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override

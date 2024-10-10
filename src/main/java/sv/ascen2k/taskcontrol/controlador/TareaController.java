@@ -6,11 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sv.ascen2k.taskcontrol.modelo.Tarea;
 import sv.ascen2k.taskcontrol.modelo.Usuario;
-import sv.ascen2k.taskcontrol.repositorio.TareaRepositorio;
 import sv.ascen2k.taskcontrol.servicio.TareaServicio;
 import sv.ascen2k.taskcontrol.servicio.UsuarioServicio;
 
@@ -40,30 +38,18 @@ public class TareaController {
         return tareaServicio.getPeageableTareas(pageable);
     }
 
-    @GetMapping("/usuario/{id}")
-    public List<Tarea> porUsuario(@PathVariable Integer id){
-        return tareaServicio.getTareasByUsuarios(id);
-    }
-
-    /*@GetMapping("/usuario/{id}")
-    public ResponseEntity<List<Tarea>> getTareasByUsuarioId(@PathVariable Integer id) {
-        return new ResponseEntity<>(tareaRepositorio.findByUsuarioId(id), HttpStatus.OK);
-    }*/
-
-    @GetMapping("/activas={vigente}")
-    public List<Tarea> vigentes(@PathVariable Boolean vigente){
-        return tareaServicio.getTareasVigentes(vigente);
+    @GetMapping("/{id}")
+    public Tarea obtenerTarea(@PathVariable Integer id){
+        return tareaServicio.getTareaById(id);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Tarea crear(@RequestBody Tarea tarea){
-        Usuario usuario = usuarioServicio.getUsuarioById(tarea.getUsuario().getId());
-        tarea.setUsuario(usuario);
-        tarea.setFechaInicio(LocalDateTime.now());
+        tarea.setFechaCreacion(LocalDateTime.now());
         tarea.setFechaEstimada(tarea.getFechaEstimada());
         tarea.setEstado(Tarea.Estado.CREADO);
-        tarea.setVigente(true);
+        tarea.setEsVigente(true);
         return tareaServicio.saveTarea(tarea);
     }
 
@@ -74,10 +60,44 @@ public class TareaController {
         tarea.setDescripcion(form.getDescripcion());
         tarea.setFechaEstimada(form.getFechaEstimada());
         tarea.setPrioridad(form.getPrioridad());
-        tarea.setEstado(form.getEstado());
-        if(form.getEstado()==Tarea.Estado.FINALIZADO){
-            tarea.setFechaFin(LocalDateTime.now());
-        }
         return tareaServicio.saveTarea(tarea);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void eliminar(@PathVariable Integer id){
+        Tarea tarea = tareaServicio.getTareaById(id);
+        if(tarea != null){
+            tarea.setEsVigente(false);
+            tareaServicio.saveTarea(tarea);
+        }
+    }
+
+    @PutMapping("/{idTarea}/asignarresponsable/{idUsuario}")
+    public Tarea asignarResponsable(@PathVariable Integer idTarea,@PathVariable Integer idUsuario){
+        Usuario usuario = usuarioServicio.getUsuarioByIdAndEsVigente(idUsuario,true);
+        Tarea tarea = tareaServicio.getTareaByIdAndEsVigencia(idTarea,true);
+        if(usuario != null && tarea != null){
+            tarea.setUsuario(usuario);
+            tarea.setEstado(Tarea.Estado.ASIGNADO);
+            tarea.setFechaAsignacion(LocalDateTime.now());
+            tareaServicio.saveTarea(tarea);
+        }
+        return tarea;
+    }
+
+    @GetMapping("/usuario/{id}")
+    public List<Tarea> porUsuario(@PathVariable Integer id){
+        return tareaServicio.getTareasByUsuarios(id);
+    }
+
+    /*@GetMapping("/usuario/{id}")
+    public ResponseEntity<List<Tarea>> getTareasByUsuarioId(@PathVariable Integer id) {
+        return new ResponseEntity<>(tareaRepositorio.findByUsuarioId(id), HttpStatus.OK);
+    }*/
+
+    /*@GetMapping("/activas={vigente}")
+    public List<Tarea> vigentes(@PathVariable Boolean vigente){
+        return tareaServicio.getTareasVigentes(vigente);
+    }*/
 }

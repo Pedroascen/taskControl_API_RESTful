@@ -9,7 +9,8 @@ import java.util.List;
 public interface UsuarioServicio {
     Usuario saveUsuario(Usuario usuario);
     List<Usuario> getAllUsuarios();
-    List<Usuario> getUsuariosActivosNoActivos(Boolean activo);
+    List<Usuario> getUsuariosVigentes(Boolean activo);
     Usuario getUsuarioById(Integer id);
+    Usuario getUsuarioByIdAndEsVigente(Integer id, Boolean vigencia);
     Page<Usuario> getPeageableUsuarios(Pageable pageable);
 }

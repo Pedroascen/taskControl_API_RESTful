@@ -1,7 +1,6 @@
 package sv.ascen2k.taskcontrol.controlador;
 
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,12 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import sv.ascen2k.taskcontrol.modelo.Tarea;
 import sv.ascen2k.taskcontrol.modelo.Usuario;
-import sv.ascen2k.taskcontrol.repositorio.UsuarioRepositorio;
 import sv.ascen2k.taskcontrol.servicio.UsuarioServicio;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -27,14 +24,14 @@ public class UsuarioControlador {
         this.usuarioServicio = usuarioServicio;
     }
 
-    @GetMapping("/paginar")
-    Page<Usuario> paginarUser(@PageableDefault(size = 5, sort = "nombre", direction = Sort.Direction.ASC) Pageable pageable){
-        return usuarioServicio.getPeageableUsuarios(pageable);
-    }
-
     @GetMapping
     public List<Usuario> listar(){
         return usuarioServicio.getAllUsuarios();
+    }
+
+    @GetMapping("/paginar")
+    Page<Usuario> paginarUser(@PageableDefault(size = 5, sort = "nombre", direction = Sort.Direction.ASC) Pageable pageable){
+        return usuarioServicio.getPeageableUsuarios(pageable);
     }
 
     @GetMapping("/{id}")
@@ -45,8 +42,8 @@ public class UsuarioControlador {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Usuario crear(@RequestBody Usuario usuario){
-        usuario.setfechaCreacion(LocalDateTime.now());
-        usuario.setActivo(true);
+        usuario.setFechaCreacion(LocalDateTime.now());
+        usuario.setEsVigente(true);
         return usuarioServicio.saveUsuario(usuario);
     }
 
@@ -65,7 +62,7 @@ public class UsuarioControlador {
     public void eliminar(@PathVariable Integer id){
         Usuario usuario = usuarioServicio.getUsuarioById(id);
         if(usuario!=null){
-            usuario.setActivo(false);
+            usuario.setEsVigente(false);
             usuarioServicio.saveUsuario(usuario);
         }
     }

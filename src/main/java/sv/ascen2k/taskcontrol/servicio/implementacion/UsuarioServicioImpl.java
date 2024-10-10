@@ -32,13 +32,18 @@ public class UsuarioServicioImpl implements UsuarioServicio {
     }
 
     @Override
-    public List<Usuario> getUsuariosActivosNoActivos(Boolean activo) {
-        return usuarioRepositorio.findByActivo(activo);
+    public List<Usuario> getUsuariosVigentes(Boolean activo) {
+        return usuarioRepositorio.findByEsVigente(activo);
     }
 
     @Override
     public Usuario getUsuarioById(Integer id) {
         return usuarioRepositorio.findById(id).orElseThrow(()->new EntityNotFoundException("Usuario no encontrado..."));
+    }
+
+    @Override
+    public Usuario getUsuarioByIdAndEsVigente(Integer id, Boolean vigencia) {
+        return usuarioRepositorio.findByIdAndEsVigente(id,vigencia).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override

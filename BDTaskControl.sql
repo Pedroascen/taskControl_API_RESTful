@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `taskcontrol` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `taskcontrol`;
--- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: taskcontrol
 -- ------------------------------------------------------
--- Server version	8.0.38
+-- Server version	8.0.33
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -29,16 +29,27 @@ CREATE TABLE `tarea` (
   `responsable_id` int DEFAULT NULL,
   `titulo` varchar(100) DEFAULT NULL,
   `descripcion` varchar(255) DEFAULT NULL,
-  `fecha_inicio` datetime DEFAULT NULL,
+  `fecha_crea` datetime DEFAULT NULL,
+  `fecha_estimada` datetime DEFAULT NULL,
+  `fecha_asigna` datetime DEFAULT NULL,
   `fecha_fin` datetime DEFAULT NULL,
   `prioridad` enum('NORMAL','IMPORTANTE','URGENTE') DEFAULT NULL,
   `estado` enum('CREADO','ASIGNADO','FINALIZADO') DEFAULT NULL,
-  `activo` tinyint DEFAULT NULL,
+  `vigente` tinyint DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `responsable_id_idx` (`responsable_id`),
   CONSTRAINT `FK_tarea_usuario` FOREIGN KEY (`responsable_id`) REFERENCES `usuario` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tarea`
+--
+
+LOCK TABLES `tarea` WRITE;
+/*!40000 ALTER TABLE `tarea` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tarea` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `usuario`
@@ -54,10 +65,19 @@ CREATE TABLE `usuario` (
   `correo` varchar(65) DEFAULT NULL,
   `clave` varchar(255) NOT NULL,
   `fecha_crea` datetime DEFAULT NULL,
-  `activo` tinyint DEFAULT NULL,
+  `vigente` tinyint DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `usuario`
+--
+
+LOCK TABLES `usuario` WRITE;
+/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
+/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -68,4 +88,4 @@ CREATE TABLE `usuario` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-18 19:02:19
+-- Dump completed on 2024-10-09 19:29:13

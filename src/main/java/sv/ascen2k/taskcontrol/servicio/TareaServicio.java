@@ -11,5 +11,6 @@ public interface TareaServicio {
     List<Tarea> getTareasVigentes(Boolean vigente);
     List<Tarea> getTareasByUsuarios(Integer id);
     Tarea getTareaById(Integer id);
+    Tarea getTareaByIdAndEsVigencia(Integer id, Boolean vigencia);
     Page<Tarea> getPeageableTareas(Pageable pageable);
 }
