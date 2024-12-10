@@ -7,9 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import sv.ascen2k.taskcontrol.exception.BadRequestException;
 import sv.ascen2k.taskcontrol.modelo.Tarea;
 import sv.ascen2k.taskcontrol.modelo.Usuario;
+import sv.ascen2k.taskcontrol.repositorio.UsuarioRepositorio;
 import sv.ascen2k.taskcontrol.servicio.UsuarioServicio;
 
 import java.time.LocalDateTime;
@@ -41,14 +44,22 @@ public class UsuarioControlador {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Usuario crear(@RequestBody Usuario usuario){
+    public Usuario crear(@Validated @RequestBody Usuario usuario){
+        boolean existByCorreo = usuarioServicio.existsByCorreo(usuario.getCorreo());
+        if (existByCorreo){
+            throw new BadRequestException("Email ya existe.");
+        }
         usuario.setFechaCreacion(LocalDateTime.now());
         usuario.setEsVigente(true);
         return usuarioServicio.saveUsuario(usuario);
     }
 
     @PutMapping("/{id}")
-    public Usuario actualizar(@PathVariable Integer id, @RequestBody Usuario userform){
+    public Usuario actualizar(@PathVariable Integer id,@Validated  @RequestBody Usuario userform){
+        boolean existByCorreo = usuarioServicio.existsByCorreoAndIdNot(userform.getCorreo(),id);
+        if (existByCorreo){
+            throw new BadRequestException("Email ya existe.");
+        }
         Usuario usuario = usuarioServicio.getUsuarioById(id);
         usuario.setNombre(userform.getNombre());
         usuario.setCorreo(userform.getCorreo());

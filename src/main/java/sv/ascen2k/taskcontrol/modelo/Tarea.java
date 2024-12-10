@@ -2,6 +2,7 @@ package sv.ascen2k.taskcontrol.modelo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -15,16 +16,23 @@ public class Tarea {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotNull
+    @Size(min = 5, max = 100)
     private String titulo;
+    @Size(max = 255)
     private String descripcion;
     @Column(name = "fecha_crea")
     private LocalDateTime fechaCreacion;
+    @NotNull
+    @FutureOrPresent
     @Column(name = "fecha_estimada")
     private LocalDate fechaEstimada;
     @Column(name = "fecha_asigna")
     private LocalDateTime fechaAsignacion;
+    @FutureOrPresent
     @Column(name = "fecha_fin")
     private LocalDateTime fechaFin;
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Prioridad prioridad;
     @Enumerated(EnumType.STRING)
@@ -41,6 +49,7 @@ public class Tarea {
         IMPORTANTE,
         URGENTE
     }
+
     public enum Estado{
         CREADO,
         ASIGNADO,

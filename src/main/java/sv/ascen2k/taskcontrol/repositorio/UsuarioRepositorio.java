@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface UsuarioRepositorio extends JpaRepository<Usuario,Integer> {
     List<Usuario> findByEsVigente(Boolean activo);
     Optional<Usuario> findByIdAndEsVigente(Integer id, Boolean vigente);
+    boolean existsByCorreo(String email);
+    boolean existsByCorreoAndIdNot(String email,Integer id);
 }

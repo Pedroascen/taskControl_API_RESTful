@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import sv.ascen2k.taskcontrol.exception.BadRequestException;
 import sv.ascen2k.taskcontrol.modelo.Usuario;
 import sv.ascen2k.taskcontrol.repositorio.UsuarioRepositorio;
 import sv.ascen2k.taskcontrol.servicio.UsuarioServicio;
@@ -44,6 +45,16 @@ public class UsuarioServicioImpl implements UsuarioServicio {
     @Override
     public Usuario getUsuarioByIdAndEsVigente(Integer id, Boolean vigencia) {
         return usuarioRepositorio.findByIdAndEsVigente(id,vigencia).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public boolean existsByCorreo(String email) {
+        return usuarioRepositorio.existsByCorreo(email);
+    }
+
+    @Override
+    public boolean existsByCorreoAndIdNot(String email, Integer id) {
+        return usuarioRepositorio.existsByCorreoAndIdNot(email,id);
     }
 
     @Override

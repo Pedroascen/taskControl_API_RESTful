@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sv.ascen2k.taskcontrol.modelo.Tarea;
 import sv.ascen2k.taskcontrol.modelo.Usuario;
@@ -45,7 +46,7 @@ public class TareaController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Tarea crear(@RequestBody Tarea tarea){
+    public Tarea crear(@Validated @RequestBody Tarea tarea){
         tarea.setFechaCreacion(LocalDateTime.now());
         tarea.setFechaEstimada(tarea.getFechaEstimada());
         tarea.setEstado(Tarea.Estado.CREADO);
@@ -54,7 +55,7 @@ public class TareaController {
     }
 
     @PutMapping("/{id}")
-    public Tarea actualizar(@PathVariable Integer id, @RequestBody Tarea form){
+    public Tarea actualizar(@PathVariable Integer id,@Validated @RequestBody Tarea form){
         Tarea tarea = tareaServicio.getTareaById(id);
         tarea.setTitulo(form.getTitulo());
         tarea.setDescripcion(form.getDescripcion());

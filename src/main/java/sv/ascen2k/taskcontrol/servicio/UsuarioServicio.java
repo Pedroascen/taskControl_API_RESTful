@@ -12,5 +12,7 @@ public interface UsuarioServicio {
     List<Usuario> getUsuariosVigentes(Boolean activo);
     Usuario getUsuarioById(Integer id);
     Usuario getUsuarioByIdAndEsVigente(Integer id, Boolean vigencia);
+    boolean existsByCorreo(String email);
+    boolean existsByCorreoAndIdNot(String email,Integer id);
     Page<Usuario> getPeageableUsuarios(Pageable pageable);
 }
